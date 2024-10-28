@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../CSS/style.css">
+    <title>Ahorcado</title>
+</head>
+<body>
+    <div class="container">
+        <div class="col">
+            <h1>Juego del Ahorcado</h1>
+            <h1>Mejores Puntajes</h1>
+            <table id="tabla-scores"> <!-- Tabla para mostrar los mejores puntajes -->
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Puntos</th>
+                        <th>Tiempo</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aca se agregan los Scores -->
+                </tbody>
+            </table>
+            <a href="../index.html"> <!-- Enlace para iniciar el juego -->
+                <button> Iniciar Juego </button>  <!-- Botón para iniciar el juego -->
+            </a> 
+        </div>
+    </div>
+
+    <!--Función para cargar los mejores scores -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('http://localhost:3000/mejores-scores')
+                .then(response => response.json())
+                .then(data => {
+                    const tablaScores = document.querySelector('#tabla-scores tbody');
+                    data.forEach(score => {
+                        const fila = document.createElement('tr');
+                        const fecha = new Date(score.fecha);
+                        const fechaScore = fecha.toISOString().split('T')[0]; // Formatea la fecha para mostrar solo la parte de la fecha
+
+                        fila.innerHTML = `
+                            <td>${score.nombre}</td>
+                            <td>${score.puntos}</td>
+                            <td>${score.tiempo}</td>
+                            <td>${fechaScore}</td>
+                        `;
+                        tablaScores.appendChild(fila);
+                    });
+                })
+                .catch(error => console.error('Error al obtener los scores:', error));
+        });
+    </script>
+    
+   
+    <script src="../JS/app.js"></script>
+</body>
+</html>
